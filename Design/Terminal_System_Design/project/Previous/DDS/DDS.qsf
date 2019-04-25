@@ -1,0 +1,228 @@
+# -------------------------------------------------------------------------- #
+#
+# Copyright (C) 1991-2013 Altera Corporation
+# Your use of Altera Corporation's design tools, logic functions 
+# and other software and tools, and its AMPP partner logic 
+# functions, and any output files from any of the foregoing 
+# (including device programming or simulation files), and any 
+# associated documentation or information are expressly subject 
+# to the terms and conditions of the Altera Program License 
+# Subscription Agreement, Altera MegaCore Function License 
+# Agreement, or other applicable license agreement, including, 
+# without limitation, that your use is for the sole purpose of 
+# programming logic devices manufactured by Altera and sold by 
+# Altera or its authorized distributors.  Please refer to the 
+# applicable agreement for further details.
+#
+# -------------------------------------------------------------------------- #
+#
+# Quartus II 64-Bit
+# Version 13.1.0 Build 162 10/23/2013 SJ Web Edition
+# Date created = 14:46:00  November 09, 2018
+#
+# -------------------------------------------------------------------------- #
+#
+# Notes:
+#
+# 1) The default values for assignments are stored in the file:
+#		DDS_assignment_defaults.qdf
+#    If this file doesn't exist, see file:
+#		assignment_defaults.qdf
+#
+# 2) Altera recommends that you do not modify this file. This
+#    file is updated automatically by the Quartus II software
+#    and any changes you make may be lost or overwritten.
+#
+# -------------------------------------------------------------------------- #
+
+
+set_global_assignment -name FAMILY "Cyclone III"
+set_global_assignment -name DEVICE EP3C55F484I7
+set_global_assignment -name TOP_LEVEL_ENTITY DDS
+set_global_assignment -name ORIGINAL_QUARTUS_VERSION 13.1
+set_global_assignment -name PROJECT_CREATION_TIME_DATE "14:46:00  NOVEMBER 09, 2018"
+set_global_assignment -name LAST_QUARTUS_VERSION 13.1
+set_global_assignment -name PROJECT_OUTPUT_DIRECTORY output_files
+set_global_assignment -name MIN_CORE_JUNCTION_TEMP "-40"
+set_global_assignment -name MAX_CORE_JUNCTION_TEMP 100
+set_global_assignment -name ERROR_CHECK_FREQUENCY_DIVISOR 1
+set_global_assignment -name VERILOG_FILE DDS.v
+set_global_assignment -name PARTITION_NETLIST_TYPE SOURCE -section_id Top
+set_global_assignment -name PARTITION_FITTER_PRESERVATION_LEVEL PLACEMENT_AND_ROUTING -section_id Top
+set_global_assignment -name PARTITION_COLOR 16764057 -section_id Top
+set_instance_assignment -name IO_STANDARD "3.3-V LVTTL" -to CLOCK_10M
+set_instance_assignment -name IO_STANDARD "3.3-V LVTTL" -to CLOCK_40M
+set_instance_assignment -name IO_STANDARD "3.3-V LVTTL" -to CLOCK_SELECT[0]
+set_instance_assignment -name IO_STANDARD "3.3-V LVTTL" -to CLOCK_SELECT[1]
+set_instance_assignment -name IO_STANDARD "3.3-V LVTTL" -to LED[0]
+set_instance_assignment -name IO_STANDARD "3.3-V LVTTL" -to LED[1]
+set_instance_assignment -name IO_STANDARD "3.3-V LVTTL" -to LED[2]
+set_instance_assignment -name IO_STANDARD "3.3-V LVTTL" -to LED[3]
+set_instance_assignment -name IO_STANDARD "3.3-V LVTTL" -to GPS_RX
+set_instance_assignment -name IO_STANDARD "3.3-V LVTTL" -to GPS_TX
+set_instance_assignment -name IO_STANDARD "3.3-V LVTTL" -to GPS_1PPS
+set_instance_assignment -name IO_STANDARD "3.3-V LVTTL" -to GPS_RTCM_IN
+set_instance_assignment -name IO_STANDARD "3.3-V LVTTL" -to DAC8531_CLK
+set_instance_assignment -name IO_STANDARD "3.3-V LVTTL" -to DAC8531_DIN
+set_instance_assignment -name IO_STANDARD "3.3-V LVTTL" -to DAC8531_CS
+set_instance_assignment -name IO_STANDARD "3.3-V LVTTL" -to AD9911_LO_CS
+set_instance_assignment -name IO_STANDARD "3.3-V LVTTL" -to AD9911_LO_PD
+set_instance_assignment -name IO_STANDARD "3.3-V LVTTL" -to AD9911_LO_UPDATE
+set_instance_assignment -name IO_STANDARD "3.3-V LVTTL" -to AD9911_LO_MRSET
+set_instance_assignment -name IO_STANDARD "3.3-V LVTTL" -to AD9911_LO_SCLK
+set_instance_assignment -name IO_STANDARD "3.3-V LVTTL" -to AD9911_LO_SDIO[0]
+set_instance_assignment -name IO_STANDARD "3.3-V LVTTL" -to AD9911_LO_SDIO[1]
+set_instance_assignment -name IO_STANDARD "3.3-V LVTTL" -to AD9911_LO_SDIO[2]
+set_instance_assignment -name IO_STANDARD "3.3-V LVTTL" -to AD9911_LO_SDIO[3]
+set_instance_assignment -name IO_STANDARD "3.3-V LVTTL" -to AD9911_LO_P[0]
+set_instance_assignment -name IO_STANDARD "3.3-V LVTTL" -to AD9911_LO_P[1]
+set_instance_assignment -name IO_STANDARD "3.3-V LVTTL" -to AD9911_LO_P[2]
+set_instance_assignment -name IO_STANDARD "3.3-V LVTTL" -to AD9911_LO_P[3]
+set_instance_assignment -name IO_STANDARD "3.3-V LVTTL" -to SW_AD9911_LO
+set_instance_assignment -name IO_STANDARD "3.3-V LVTTL" -to AD9911_RF_CS
+set_instance_assignment -name IO_STANDARD "3.3-V LVTTL" -to AD9911_RF_PD
+set_instance_assignment -name IO_STANDARD "3.3-V LVTTL" -to AD9911_RF_UPDATE
+set_instance_assignment -name IO_STANDARD "3.3-V LVTTL" -to AD9911_RF_MRSET
+set_instance_assignment -name IO_STANDARD "3.3-V LVTTL" -to AD9911_RF_SCLK
+set_instance_assignment -name IO_STANDARD "3.3-V LVTTL" -to AD9911_RF_SDIO[0]
+set_instance_assignment -name IO_STANDARD "3.3-V LVTTL" -to AD9911_RF_SDIO[1]
+set_instance_assignment -name IO_STANDARD "3.3-V LVTTL" -to AD9911_RF_SDIO[2]
+set_instance_assignment -name IO_STANDARD "3.3-V LVTTL" -to AD9911_RF_SDIO[3]
+set_instance_assignment -name IO_STANDARD "3.3-V LVTTL" -to AD9911_RF_P[0]
+set_instance_assignment -name IO_STANDARD "3.3-V LVTTL" -to AD9911_RF_P[1]
+set_instance_assignment -name IO_STANDARD "3.3-V LVTTL" -to AD9911_RF_P[2]
+set_instance_assignment -name IO_STANDARD "3.3-V LVTTL" -to AD9911_RF_P[3]
+set_instance_assignment -name IO_STANDARD "3.3-V LVTTL" -to SW_AD9911_RF
+set_instance_assignment -name IO_STANDARD "2.5-V" -to COM_AD_RF[0]
+set_instance_assignment -name IO_STANDARD "2.5-V" -to COM_AD_RF[1]
+set_instance_assignment -name IO_STANDARD "2.5-V" -to COM_AD_RF[2]
+set_instance_assignment -name IO_STANDARD "2.5-V" -to COM_AD_RF[3]
+set_instance_assignment -name IO_STANDARD "2.5-V" -to COM_AD_RF[4]
+set_instance_assignment -name IO_STANDARD "2.5-V" -to COM_AD_RF[5]
+set_instance_assignment -name IO_STANDARD "2.5-V" -to COM_AD_RF[6]
+set_instance_assignment -name IO_STANDARD "2.5-V" -to COM_AD_RF[7]
+set_instance_assignment -name IO_STANDARD "2.5-V" -to COM_AD_RF[8]
+set_instance_assignment -name IO_STANDARD "2.5-V" -to COM_AD_RF[9]
+set_instance_assignment -name IO_STANDARD "2.5-V" -to COM_AD_RF[10]
+set_instance_assignment -name IO_STANDARD "2.5-V" -to COM_AD_RF[11]
+set_instance_assignment -name IO_STANDARD "2.5-V" -to COM_AD_RF[12]
+set_instance_assignment -name IO_STANDARD "2.5-V" -to COM_AD_RF[13]
+set_instance_assignment -name IO_STANDARD "2.5-V" -to COM_AD_RF[14]
+set_instance_assignment -name IO_STANDARD "2.5-V" -to COM_AD_RF[15]
+set_instance_assignment -name IO_STANDARD "2.5-V" -to COM_AD_RF[16]
+set_instance_assignment -name IO_STANDARD "2.5-V" -to COM_AD_RF[17]
+set_global_assignment -name STRATIX_DEVICE_IO_STANDARD "2.5 V"
+set_location_assignment PIN_AB11 -to CLOCK_10M
+set_location_assignment PIN_AB12 -to CLOCK_40M
+set_location_assignment PIN_AB10 -to CLOCK_SELECT[0]
+set_location_assignment PIN_AA9 -to CLOCK_SELECT[1]
+set_location_assignment PIN_W22 -to LED[0]
+set_location_assignment PIN_V22 -to LED[1]
+set_location_assignment PIN_U22 -to LED[2]
+set_location_assignment PIN_R22 -to LED[3]
+set_location_assignment PIN_Y21 -to GPS_RX
+set_location_assignment PIN_Y22 -to GPS_TX
+set_location_assignment PIN_AA22 -to GPS_1PPS
+set_location_assignment PIN_AA21 -to GPS_RTCM_IN
+set_location_assignment PIN_AB13 -to DAC8531_CLK
+set_location_assignment PIN_AA13 -to DAC8531_DIN
+set_location_assignment PIN_AA14 -to DAC8531_CS
+set_location_assignment PIN_A15 -to AD9911_LO_CS
+set_location_assignment PIN_A20 -to AD9911_LO_PD
+set_location_assignment PIN_B14 -to AD9911_LO_UPDATE
+set_location_assignment PIN_B19 -to AD9911_LO_MRSET
+set_location_assignment PIN_B15 -to AD9911_LO_SCLK
+set_location_assignment PIN_A16 -to AD9911_LO_SDIO[0]
+set_location_assignment PIN_B16 -to AD9911_LO_SDIO[1]
+set_location_assignment PIN_A17 -to AD9911_LO_SDIO[2]
+set_location_assignment PIN_B18 -to AD9911_LO_SDIO[3]
+set_location_assignment PIN_C13 -to AD9911_LO_P[0]
+set_location_assignment PIN_A13 -to AD9911_LO_P[1]
+set_location_assignment PIN_B13 -to AD9911_LO_P[2]
+set_location_assignment PIN_A14 -to AD9911_LO_P[3]
+set_location_assignment PIN_B20 -to SW_AD9911_LO
+set_location_assignment PIN_A5 -to AD9911_RF_CS
+set_location_assignment PIN_A9 -to AD9911_RF_PD
+set_location_assignment PIN_B5 -to AD9911_RF_UPDATE
+set_location_assignment PIN_B9 -to AD9911_RF_MRSET
+set_location_assignment PIN_B6 -to AD9911_RF_SCLK
+set_location_assignment PIN_A6 -to AD9911_RF_SDIO[0]
+set_location_assignment PIN_B7 -to AD9911_RF_SDIO[1]
+set_location_assignment PIN_A7 -to AD9911_RF_SDIO[2]
+set_location_assignment PIN_B8 -to AD9911_RF_SDIO[3]
+set_location_assignment PIN_B3 -to AD9911_RF_P[0]
+set_location_assignment PIN_A3 -to AD9911_RF_P[1]
+set_location_assignment PIN_B4 -to AD9911_RF_P[2]
+set_location_assignment PIN_A4 -to AD9911_RF_P[3]
+set_location_assignment PIN_C10 -to SW_AD9911_RF
+set_location_assignment PIN_V1 -to COM_AD_RF[0]
+set_location_assignment PIN_V2 -to COM_AD_RF[1]
+set_location_assignment PIN_V3 -to COM_AD_RF[2]
+set_location_assignment PIN_U1 -to COM_AD_RF[3]
+set_location_assignment PIN_U2 -to COM_AD_RF[4]
+set_location_assignment PIN_T3 -to COM_AD_RF[5]
+set_location_assignment PIN_R1 -to COM_AD_RF[6]
+set_location_assignment PIN_R2 -to COM_AD_RF[7]
+set_location_assignment PIN_T1 -to COM_AD_RF[8]
+set_location_assignment PIN_P2 -to COM_AD_RF[9]
+set_location_assignment PIN_P3 -to COM_AD_RF[10]
+set_location_assignment PIN_P4 -to COM_AD_RF[11]
+set_location_assignment PIN_N1 -to COM_AD_RF[12]
+set_location_assignment PIN_N2 -to COM_AD_RF[13]
+set_location_assignment PIN_P1 -to COM_AD_RF[14]
+set_location_assignment PIN_M1 -to COM_AD_RF[15]
+set_location_assignment PIN_M2 -to COM_AD_RF[16]
+set_location_assignment PIN_M3 -to COM_AD_RF[17]
+set_location_assignment PIN_V1 -to COM_AD_RF_GPS_RX
+set_location_assignment PIN_V2 -to COM_AD_RF_GPS_TX
+set_location_assignment PIN_V3 -to COM_AD_RF_GPS_1PPS
+set_location_assignment PIN_U1 -to COM_AD_RF_DAC8531_CLK
+set_location_assignment PIN_U2 -to COM_AD_RF_DAC8531_DIN
+set_location_assignment PIN_T3 -to COM_AD_RF_DAC8531_CS
+set_location_assignment PIN_R1 -to COM_AD_RF_AD9911_RF_UPDATE
+set_location_assignment PIN_R2 -to COM_AD_RF_AD9911_RF_SCLK
+set_location_assignment PIN_T1 -to COM_AD_RF_AD9911_RF_SDIO0
+set_location_assignment PIN_P2 -to COM_AD_RF_AD9911_RF_P1
+set_location_assignment PIN_P3 -to COM_AD_RF_AD9911_RF_P3
+set_location_assignment PIN_P4 -to COM_AD_RF_AD9911_LO_UPDATE
+set_location_assignment PIN_N1 -to COM_AD_RF_AD9911_LO_SCLK
+set_location_assignment PIN_N2 -to COM_AD_RF_AD9911_LO_SDIO0
+set_location_assignment PIN_M3 -to COM_AD_RF_AD9911_LO_P1
+set_location_assignment PIN_M2 -to COM_AD_RF_AD9911_LO_P3
+set_instance_assignment -name IO_STANDARD "3.3-V LVTTL" -to COM_AD_RF_GPS_RX
+set_instance_assignment -name IO_STANDARD "3.3-V LVTTL" -to COM_AD_RF_GPS_TX
+set_instance_assignment -name IO_STANDARD "3.3-V LVTTL" -to COM_AD_RF_GPS_1PPS
+set_instance_assignment -name IO_STANDARD "3.3-V LVTTL" -to COM_AD_RF_DAC8531_CLK
+set_instance_assignment -name IO_STANDARD "3.3-V LVTTL" -to COM_AD_RF_DAC8531_DIN
+set_instance_assignment -name IO_STANDARD "3.3-V LVTTL" -to COM_AD_RF_DAC8531_CS
+set_instance_assignment -name IO_STANDARD "3.3-V LVTTL" -to COM_AD_RF_AD9911_RF_UPDATE
+set_instance_assignment -name IO_STANDARD "3.3-V LVTTL" -to COM_AD_RF_AD9911_RF_SCLK
+set_instance_assignment -name IO_STANDARD "3.3-V LVTTL" -to COM_AD_RF_AD9911_RF_SDIO0
+set_instance_assignment -name IO_STANDARD "3.3-V LVTTL" -to COM_AD_RF_AD9911_RF_P1
+set_instance_assignment -name IO_STANDARD "3.3-V LVTTL" -to COM_AD_RF_AD9911_RF_P3
+set_instance_assignment -name IO_STANDARD "3.3-V LVTTL" -to COM_AD_RF_AD9911_LO_UPDATE
+set_instance_assignment -name IO_STANDARD "3.3-V LVTTL" -to COM_AD_RF_AD9911_LO_SCLK
+set_instance_assignment -name IO_STANDARD "3.3-V LVTTL" -to COM_AD_RF_AD9911_LO_SDIO0
+set_instance_assignment -name IO_STANDARD "3.3-V LVTTL" -to COM_AD_RF_AD9911_LO_P1
+set_instance_assignment -name IO_STANDARD "3.3-V LVTTL" -to COM_AD_RF_AD9911_LO_P3
+set_global_assignment -name ENABLE_CONFIGURATION_PINS OFF
+set_global_assignment -name ENABLE_NCE_PIN OFF
+set_global_assignment -name ENABLE_BOOT_SEL_PIN OFF
+set_global_assignment -name USE_CONFIGURATION_DEVICE ON
+set_global_assignment -name CRC_ERROR_OPEN_DRAIN OFF
+set_global_assignment -name RESERVE_ALL_UNUSED_PINS_WEAK_PULLUP "AS INPUT TRI-STATED"
+set_global_assignment -name OUTPUT_IO_TIMING_NEAR_END_VMEAS "HALF VCCIO" -rise
+set_global_assignment -name OUTPUT_IO_TIMING_NEAR_END_VMEAS "HALF VCCIO" -fall
+set_global_assignment -name OUTPUT_IO_TIMING_FAR_END_VMEAS "HALF SIGNAL SWING" -rise
+set_global_assignment -name OUTPUT_IO_TIMING_FAR_END_VMEAS "HALF SIGNAL SWING" -fall
+set_global_assignment -name CYCLONEIII_CONFIGURATION_DEVICE EPCS16
+set_global_assignment -name FORCE_CONFIGURATION_VCCIO ON
+set_global_assignment -name ENABLE_SIGNALTAP ON
+set_global_assignment -name USE_SIGNALTAP_FILE output_files/stp1.stp
+set_global_assignment -name SIGNALTAP_FILE output_files/stp1.stp
+set_location_assignment PIN_P1 -to COM_AD_RF_AD9911_RF_MRSET
+set_location_assignment PIN_M1 -to COM_AD_RF_AD9911_LO_MRSET
+set_instance_assignment -name IO_STANDARD "3.3-V LVTTL" -to COM_AD_RF_AD9911_RF_MRSET
+set_instance_assignment -name IO_STANDARD "3.3-V LVTTL" -to COM_AD_RF_AD9911_LO_MRSET
+set_instance_assignment -name PARTITION_HIERARCHY root_partition -to | -section_id Top
+set_global_assignment -name SLD_FILE db/stp1_auto_stripped.stp

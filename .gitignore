@@ -1,3 +1,31 @@
+#编译器相关
+.idea
+.vscode
+output_files
+db
+incremental_db
+simulation
+greybox_tmp
+.qsys_edit
+hc_output
+__pycache__
+
+#终端资源文件夹
+资料
+
+#备份文件
+*.bak
+~*
+
+#探测数据文件
+*.COS
+*.SOS
+*.AMP
+
+#参考文献
+references
+
+
 # Prerequisites
 *.d
 
@@ -30,3 +58,5 @@
 *.exe
 *.out
 *.app
+
+
