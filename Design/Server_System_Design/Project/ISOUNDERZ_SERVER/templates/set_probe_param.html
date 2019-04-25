@@ -1,0 +1,620 @@
+{% extends "general.html" %}
+
+{% block header -%}
+<style>
+    .content-warp-middle {
+        padding: 50px 10px;
+        margin: auto;
+
+    }
+
+
+
+    @media screen and (max-width: 768px) {
+        .content-warp-middle {
+            width: 90%;
+        }
+    }
+
+    .layui-card-header {
+        font-weight: bold;
+    }
+
+    .layui-container {
+        width: 100%;
+    }
+
+    .layui-form-item, .layui-input-block {
+        margin: auto;
+    }
+
+    .layui-form-label {
+        float: left;
+        display: block;
+        padding: 9px 5px;
+        width: 80px;
+        font-weight: 400;
+        line-height: 20px;
+        text-align: left;
+    }
+
+    .layui-row {
+        margin: 8px auto;
+    }
+
+    .layui-card > div, .layui-card > input {
+        color: #333333
+    }
+
+    .layui-input, .layui-select, .layui-textarea {
+        color: #333333
+    }
+
+    .layui-input:disabled {
+        color: #eff0ef;
+        cursor: not-allowed;
+
+    }
+
+    .layui-colla-title {
+        background-color: #74797c;
+        color: white;
+        font-weight: bolder;
+    }
+
+    .layui-colla-content {
+        background-color: #FFFFFF;
+    }
+
+    .layui-collapse {
+        border-width: 0;
+        border-style: solid;
+        border-radius: 2px;
+    }
+
+    .layui-card {
+        margin-bottom: 16px;
+        border-radius: 7px;
+    }
+
+    .layui-colla-item {
+        border-top-width: 0;
+    }
+
+    .text-right {
+        /*text-align: right;*/
+    }
+
+    .row:hover {
+        background-color: #f9f9f9;
+    }
+
+    .layui-form-label {
+        width: 110px;
+    }
+
+
+</style>
+{%- endblock %}
+
+{% block body -%}
+<div class="title-wrap"><a href="javascript:history.back(-1)"> <i class="layui-icon back-icon">&#xe603;</i></a>
+    探测任务配置面板
+</div>
+<div style="padding: 20px;">
+    <div class="layui-row layui-col-space15">
+        <div class="layui-col-md2">
+        </div>
+        <div class="layui-col-md3">
+            <div class="layui-collapse">
+                <div class="layui-colla-item">
+                    <h2 class="layui-colla-title">基本信息</h2>
+                    <div class="layui-colla-content layui-show">
+                        <div class="row layui-row">
+                            <div class="layui-col-md5">
+                                <label class="text-right layui-form-label">ID：</label>
+                            </div>
+                            <div class="layui-col-md6">
+                                <label id="label_deviceId" class="layui-form-label">????</label>
+                            </div>
+                        </div>
+                        <div class="row layui-row">
+                            <div class="layui-col-md5">
+                                <label class="text-right layui-form-label">设备名：</label>
+                            </div>
+                            <div class="layui-col-md6">
+                                <label id="label_deviceName" class="layui-form-label">wiss</label>
+                            </div>
+                        </div>
+                        <div class="row layui-row">
+                            <div class="layui-col-md5">
+                                <label class="text-right layui-form-label">位置：</label>
+                            </div>
+                            <div class="layui-col-md6">
+                                <label id="label_deviceLocation" class="layui-form-label">武汉</label>
+                            </div>
+                        </div>
+                        <div class="row layui-row">
+                            <div class="layui-col-md5">
+                                <label class="text-right layui-form-label">设备状态：</label>
+                            </div>
+                            <div class="layui-col-md6">
+                                <label id="label_deviceStatus" class="layui-form-label">已连接</label>
+                            </div>
+                        </div>
+                        <div class="row layui-row">
+                            <div class="layui-col-md5">
+                                <label class="text-right layui-form-label">探测状态：</label>
+                            </div>
+                            <div class="layui-col-md6">
+                                <label id="label_deviceProbeStatus" class="layui-form-label">未探测</label>
+                            </div>
+                        </div>
+                        <div class="row layui-row">
+                            <div class="layui-col-md5">
+                                <label class="text-right layui-form-label">时钟精度：</label>
+                            </div>
+                            <div class="layui-col-md6">
+                                <label id="label_deviceSysClockPrecision" class="layui-form-label">± 1/100</label>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <div class="layui-colla-item">
+                    <h2 class="layui-colla-title">GPS信息</h2>
+                    <div class="layui-colla-content layui-show">
+                        <div class="row layui-row">
+                            <div class="layui-col-md5">
+                                <label class="text-right layui-form-label">状态：</label>
+                            </div>
+                            <div class="layui-col-md6">
+                                <label id="label_gpsLocked" class="layui-form-label">未锁定</label>
+                            </div>
+                        </div>
+                        <div class="row layui-row">
+                            <div class="layui-col-md5">
+                                <label class="text-right layui-form-label">日期时间：</label>
+                            </div>
+                            <div class="layui-col-md6">
+                                <label id="label_gpsTime" class="layui-form-label">2019-1-18<br/>01:48:49</label>
+                            </div>
+                        </div>
+                        <div class="row layui-row">
+                            <div class="layui-col-md5">
+                                <label class="text-right layui-form-label">经纬度：</label>
+                            </div>
+                            <div class="layui-col-md6">
+                                <label id="label_Longitude_latitude" class="layui-form-label">N38°43′54.21″ <br/> E119°52′58.02″</label>
+                            </div>
+                        </div>
+                        <div class="row layui-row">
+                            <div class="layui-col-md5">
+                                <label class="text-right layui-form-label">海拔：</label>
+                            </div>
+                            <div class="layui-col-md6">
+                                <label id="label_altitude" class="layui-form-label">410 m</label>
+                            </div>
+                        </div>
+                        <div class="row layui-row">
+                            <div class="layui-col-md5">
+                                <label class="text-right layui-form-label">卫星数量：</label>
+                            </div>
+                            <div class="layui-col-md6">
+                                <label id="label_gps_tracking_satellites" class="layui-form-label">3</label>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <div class="layui-colla-item">
+                    <h2 class="layui-colla-title">控制</h2>
+                    <div class="layui-colla-content layui-show" style="min-height: 150px;text-align: center;padding:5px">
+                        <button id="publish_btn" onclick="publish();" class="layui-btn layui-btn-fluid" style="margin: 25px auto; max-width: 270px">
+                            <i class="layui-icon">&#xe681;</i>
+                            发布任务
+                        </button>
+                        <div class="layui-btn-group">
+                            <button class="layui-btn layui-btn-primary">
+                                <i class="layui-icon">&#xe651;</i>
+                                停止
+                            </button>
+                            <button class="layui-btn layui-btn-primary" onclick="openImg()">
+                                <i class="layui-icon">&#xe642;</i>
+                                查看
+                            </button>
+                            <button onclick="getNewStatus()" class="layui-btn layui-btn-primary">
+                                <i class="layui-icon">&#xe716;</i>
+                                设置
+                            </button>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <div class="layui-col-md5">
+            <form role="form" id="paramsForm" class="layui-form" action="{{ url_for('route_login') }}" method="post" lay-filter="formProbeParam">
+                <div class="layui-card">
+                    <div class="layui-card-header">触发参数</div>
+                    <div class="layui-card-body">
+                        <div class="layui-container">
+                            <div class="layui-row">
+                                <div class="layui-col-md7">
+                                    <label class="layui-form-label">触发方式</label>
+                                </div>
+                                <div class="layui-col-md5">
+                                    <div class="layui-form-item">
+                                        <select id="triggerMode" name="triggerMode" lay-filter="triggerMode">
+                                            <option value="1" selected="">立即触发</option>
+                                            <option value="2">GPS触发</option>
+                                        </select>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="layui-row">
+                                <div class="layui-col-md7">
+                                    <label class="layui-form-label">日期</label>
+                                </div>
+                                <div class="layui-col-md5">
+                                    <div class="layui-form-item">
+                                        <input disabled name="triggerDate" onfocus="this.blur();" type="text" class="layui-input" id="triggerDate" placeholder="yyyy-MM-dd">
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="layui-row">
+                                <div class="layui-col-md7">
+                                    <label class="trigger_DateTime layui-form-label">时间</label>
+                                </div>
+                                <div class="layui-col-md5">
+                                    <div class="layui-form-item">
+                                        <input disabled name="triggerTime" onfocus="this.blur();" type="text" class="layui-input" id="triggerTime" placeholder="HH:mm:ss">
+                                    </div>
+                                </div>
+                            </div>
+
+                        </div>
+                    </div>
+                </div>
+
+                <div class="layui-card">
+                    <div class="layui-card-header">频率参数</div>
+                    <div class="layui-card-body">
+                        <div class="layui-container">
+                            <div class="layui-row">
+                                <div class="layui-col-md7">
+                                    <label class="layui-form-label">频率模式</label>
+                                </div>
+                                <div class="layui-col-md5">
+                                    <div class="layui-form-item">
+                                        <select id="freqMode" name="freqMode" lay-filter="freqMode">
+                                            <option value="1">定频</option>
+                                            <option value="2" disabled>跳频</option>
+                                            <option value="3" selected>扫频</option>
+                                        </select>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="layui-row">
+                                <div class="layui-col-md7">
+                                    <label class="layui-form-label">单点次数</label>
+                                </div>
+                                <div class="layui-col-md5">
+                                    <div class="layui-form-item">
+                                        <input value="32" required="required" type="number" maxlength="5" name="repetitionNumber" id="repetitionNumber" class="layui-input">
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="layui-row">
+                                <div class="layui-col-md7">
+                                    <label class="layui-form-label">起始频率(MHz)</label>
+                                </div>
+                                <div class="layui-col-md5">
+                                    <div class="layui-form-item">
+                                        <input required="required" type="text" maxlength="5" name="startFreq" id="startFreq" placeholder="MHz" autocomplete="off" class="layui-input">
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="layui-row">
+                                <div class="layui-col-md7">
+                                    <label class="layui-form-label">步进频率(MHz)</label>
+                                </div>
+                                <div class="layui-col-md5">
+                                    <div class="layui-form-item">
+                                        <input type="text" maxlength="5" name="stepFreq" id="stepFreq" placeholder="MHz" autocomplete="off" class="layui-input">
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="layui-row">
+                                <div class="layui-col-md7">
+                                    <label class="layui-form-label">截止频率(MHz)</label>
+                                </div>
+                                <div class="layui-col-md5">
+                                    <div class="layui-form-item">
+                                        <input type="text" maxlength="5" name="endFreq" id="endFreq" placeholder="MHz" autocomplete="off" class="layui-input">
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="layui-card">
+                    <div class="layui-card-header">码字参数</div>
+                    <div class="layui-card-body">
+                        <div class="layui-container">
+                            <div class="layui-row">
+                                <div class="layui-col-md7">
+                                    <label class="layui-form-label">码字</label>
+                                </div>
+                                <div class="layui-col-md5">
+                                    <div class="layui-form-item">
+                                        <select id="codeID" name="codeID">
+                                            <option value="0" disabled>M-序列</option>
+                                            <option value="1">8位互补码</option>
+                                            <option value="2" selected="">16位互补码</option>
+                                            <option value="3">完全互补码</option>
+                                        </select>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="layui-row">
+                                <div class="layui-col-md7">
+                                    <label class="layui-form-label">基带速率(us)</label>
+                                </div>
+                                <div class="layui-col-md5">
+                                    <div class="layui-form-item">
+                                        <input id="baseSpeed" required="required" type="text" maxlength="5" name="baseSpeed" placeholder="us" autocomplete="off" class="layui-input">
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="layui-row">
+                                <div class="layui-col-md7">
+                                    <label class="layui-form-label">脉宽(bit)</label>
+                                </div>
+                                <div class="layui-col-md5">
+                                    <div class="layui-form-item">
+                                        <input id="pulseWide" required="required" type="number" maxlength="5" name="pulseWide" placeholder="位" autocomplete="off" class="layui-input">
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="layui-card">
+                    <div class="layui-card-header">探测参数</div>
+                    <div class="layui-card-body">
+                        <div class="layui-container">
+                            <div class="layui-row">
+                                <div class="layui-col-md7">
+                                    <label class="layui-form-label">探测类型</label>
+                                </div>
+                                <div class="layui-col-md5">
+                                    <div class="layui-form-item">
+                                        <select id="probeMode" name="probeMode" lay-filter="probeMode">
+                                            <option value="0" selected="">垂测</option>
+                                            <option value="1">斜侧</option>
+                                            <option value="2">斜返</option>
+                                        </select>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="layui-row">
+                                <div class="layui-col-md7">
+                                    <label class="layui-form-label">收发模式</label>
+                                </div>
+                                <div class="layui-col-md5">
+                                    <div class="layui-form-item">
+                                        <select id="sendRecvMode" name="sendRecvMode" lay-filter="sendRecvMode">
+                                            <option value="1" selected="">发送接收</option>
+                                            <option value="2">仅发送</option>
+                                            <option value="3">近场接收</option>
+                                            <option value="4">远场接收</option>
+                                            <option value="5">闭环测试</option>
+                                        </select>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </form>
+        </div>
+    </div>
+</div>
+{%- endblock %}
+
+{% block footer -%}
+<script>
+    layui.use('element', function () {
+        var element = layui.element;
+    });
+
+    layui.use('laydate', function () {
+        var laydate = layui.laydate;
+
+        //常规用法
+        laydate.render({
+            elem: '#triggerDate',
+            value: new Date()
+        });
+
+        //时间选择器
+        laydate.render({
+            elem: '#triggerTime',
+            type: 'time',
+            value: new Date()
+        });
+    });
+
+    layui.use('form', function () {
+        var form = layui.form;
+
+        form.val("formProbeParam", {
+            "startFreq": "2",
+            "stepFreq": "0.05",
+            "endFreq": "20",
+            "baseSpeed": "25.6",
+            "pulseWide": "320"
+        });
+
+
+        form.on('select(triggerMode)', function (data) {
+            if (data.value === '1') {
+                triggerTime.setAttribute("disabled", "");
+                triggerDate.setAttribute("disabled", "");
+            } else {
+                triggerTime.removeAttribute("disabled");
+                triggerDate.removeAttribute("disabled");
+            }
+        });
+
+        form.on('select(freqMode)', function (data) {
+            //
+            if (data.value === '3') {
+                stepFreq.removeAttribute("disabled");
+                endFreq.removeAttribute("disabled");
+            } else {
+                stepFreq.setAttribute("disabled", "");
+                endFreq.setAttribute("disabled", "");
+            }
+        });
+
+
+    });
+
+</script>
+<script>
+    //var paramsForm = document.getElementById("paramsForm");
+    var triggerMode = document.getElementById("triggerMode");
+    var triggerDate = document.getElementById("triggerDate");
+    var triggerTime = document.getElementById("triggerTime");
+
+    var freqMode = document.getElementById("freqMode");
+    var repetitionNumber = document.getElementById("repetitionNumber");
+    var startFreq = document.getElementById("startFreq");
+    var stepFreq = document.getElementById("stepFreq");
+    var endFreq = document.getElementById("endFreq");
+
+
+    var codeID = document.getElementById("codeID");
+    var baseSpeed = document.getElementById("baseSpeed");
+    var pulseWide = document.getElementById("pulseWide");
+
+    var probeMode = document.getElementById("probeMode");
+    var sendRecvMode = document.getElementById("sendRecvMode");
+
+    var curDeviceId = String("{{ session['curDeviceId'] }}");
+
+    var label_deviceId = document.getElementById("label_deviceId");
+    var label_deviceName = document.getElementById("label_deviceName");
+    var label_deviceLocation = document.getElementById("label_deviceLocation");
+    var label_deviceStatus = document.getElementById("label_deviceStatus");
+    var label_deviceProbeStatus = document.getElementById("label_deviceProbeStatus");
+    var label_deviceSysClockPrecision = document.getElementById("label_deviceSysClockPrecision");
+    var label_gpsLocked = document.getElementById("label_gpsLocked");
+    var label_gpsTime = document.getElementById("label_gpsTime");
+    var label_Longitude_latitude = document.getElementById("label_Longitude_latitude");
+    var label_altitude = document.getElementById("label_altitude");
+    var label_gps_tracking_satellites = document.getElementById("label_gps_tracking_satellites");
+
+
+    //var paramsElem = [triggerMode, triggerDate, triggerTime, freqMode, startFreq, stepFreq, endFreq, codeID, baseSpeed, pulseWide, probeMode, sendRecvMode];
+    var paramsElemN = [triggerMode, freqMode, repetitionNumber, startFreq, stepFreq, endFreq, codeID, baseSpeed, pulseWide, probeMode, sendRecvMode];
+    var paramsElemS = [triggerDate, triggerTime];
+    var name, value, i;
+
+    function publish() {
+        var params = {};
+
+        params["deviceId"] = curDeviceId;
+
+        for (i in paramsElemN) {
+            name = paramsElemN[i].name;
+            value = Number(paramsElemN[i].value);
+            params[name] = value;
+        }
+
+        for (i in paramsElemS) {
+            name = paramsElemS[i].name;
+            value = paramsElemS[i].value;
+            params[name] = value;
+        }
+
+        console.log(params);
+        submitProbeParams(params, "{{ url_for('route_probe') }}")
+    }
+
+    function submitProbeParams(content, url) {
+        var xhr = new XMLHttpRequest();
+        xhr.open('post', url);
+        xhr.setRequestHeader("Content-type", "application/json");
+        var str = JSON.stringify(content);
+        xhr.send(str);
+        xhr.onreadystatechange = function () {
+            if (xhr.readyState === 4 && xhr.status === 200) {
+                var ans = JSON.parse(xhr.responseText);
+                console.log(ans);
+                if (ans['ans'] === 1) {
+                    layer.msg('发布成功！');
+                }
+                else {
+                    layer.msg('发布失败！');
+                }
+            }
+        };
+    }
+
+    function getNewStatus() {
+        var t1 =  window.setInterval(function () {getStatus(curDeviceId)}, 5000);
+        //window.clearInterval(t1);
+    }
+
+    function getStatus(deviceId) {
+        var xhr = new XMLHttpRequest();
+        xhr.open('post', "{{ url_for('deviceStatus') }}");
+        xhr.setRequestHeader("Content-type", "application/json");
+        var str = JSON.stringify({type: "deviceStatus", deviceId: deviceId});
+        xhr.send(str);
+        xhr.onreadystatechange = function () {
+            if (xhr.readyState === 4 && xhr.status === 200) {
+                var ans = JSON.parse(xhr.responseText);
+                //console.log(ans);
+                setStatus(ans);
+            }
+        };
+    }
+
+    function setStatus(str) {
+        label_deviceId.innerHTML = curDeviceId;
+        label_deviceName.innerHTML = str["deviceName"];
+        label_deviceLocation.innerHTML = str["deviceLocation"];
+        label_deviceStatus.innerHTML = str["deviceState"];
+        label_deviceProbeStatus.innerHTML = str["probing"] ? "探测中" : "未探测";
+        label_deviceSysClockPrecision.innerHTML = str["sysClockPrecision"];
+        label_gpsLocked.innerHTML = str["GPSState"];
+        label_gpsTime.innerHTML = timeAndDate(str["GPS"]["year"], str["GPS"]["mouth"], str["GPS"]["day"], str["GPS"]["hour"], str["GPS"]["minutes"], str["GPS"]["second"]);
+        label_Longitude_latitude.innerHTML = str["GPS"]["longitude"] + "<br/>" + str["GPS"]["latitude"];
+        label_altitude.innerHTML = str["GPS"]["altitude"];
+        label_gps_tracking_satellites.innerHTML = str["GPS"]["tracking_satellites"];
+    }
+
+    function timeAndDate(Y, M, D, h, m, s) {
+        return Y + "-" + M + "-" + D + "<br/>" + h + ":" + m + ":" + s;
+    }
+
+    function openImg() {
+        layer.open({
+            type: 2,
+            title: '电离图',
+            shadeClose: false,
+            shade: 0,
+            maxmin: true,
+            area: ['1395px', '695px'],
+            //area: ['90%', '90%'],
+            content: '{{ url_for("route_ionoDiagram", types="now") }}',
+            success: function (layero, index) {
+                console.log(window.location.href);
+            }
+        });
+    }
+</script>
+{%- endblock %}

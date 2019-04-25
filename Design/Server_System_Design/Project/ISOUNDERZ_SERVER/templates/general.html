@@ -1,0 +1,229 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
+    <title>控制台</title>
+
+    <link rel="stylesheet" href="{{ url_for('static', filename='res/layui/css/layui.css', _external=True) }}">
+    <script src="{{ url_for('static', filename='res/layui/layui.js', _external=True) }}"></script>
+    <script src="{{ url_for('static', filename='js/base.js', _external=True) }}"></script>
+    <style>
+
+        .nva_no_show_in_phone {
+            display: block;
+        }
+
+        @media screen and (max-width: 768px) {
+            .nva_no_show_in_phone {
+                display: none;
+            }
+        }
+
+        .layui-layout-admin {
+            background-color: #dfdfdf;
+            background-image: url("https://s2.ax1x.com/2019/01/18/k9JWy4.jpg");
+            background-repeat: no-repeat;
+            background-position: center;
+            background-clip: content-box;
+            /*background-attachment: fixed;*/
+            background-origin: content-box;
+            background-size: cover;
+
+        }
+
+        .layui-layout-left {
+            left: 0;
+        }
+
+        .slider {
+            width: 200px;
+            text-align: center;
+
+        }
+
+        #slider_checkbox {
+            display: none;
+
+        }
+
+        #slider_checkbox ~ .extend_width {
+            transition: width 0.3s cubic-bezier(0.53, -0.01, 0.5, 1.11);
+            width: 200px;
+        }
+
+        #slider_checkbox ~ .extend_left {
+            transition: left 0.3s cubic-bezier(0.53, -0.01, 0.5, 1.11);
+            left: 200px;
+        }
+
+        #slider_checkbox:checked ~ .extend_width {
+            transition: width 0.3s cubic-bezier(0.53, -0.01, 0.5, 1.11);
+            width: 0;
+        }
+
+        #slider_checkbox:checked ~ .extend_left {
+            transition: left 0.3s cubic-bezier(0.53, -0.01, 0.5, 1.11);
+            left: 0;
+        }
+
+        #body-title {
+            width: 100%;
+            height: 50px;
+            background-color: #f4f4f4;
+        }
+
+        .layui-side-scroll {
+            background-color: #333;
+        }
+
+        .layui-side-scroll i {
+            margin-right: 10px;
+            font-weight: normal;
+        }
+
+        .layui-side-scroll a {
+            font-weight: bold;
+            font-size: 13px;
+        }
+
+        .layui-nav-tree .layui-nav-item {
+            background-color: #333;
+        }
+
+        .layui-nav-item:hover {
+            background-color: #404040;
+        }
+
+        .layui-layout-admin .layui-header {
+            background-color: #262626;
+        }
+
+        /*
+        .layui-input:hover, .layui-textarea:hover {
+            border-color: #009688 !important;
+        }
+        .layui-input:focus, .layui-textarea:focus {
+            border-color: #009688 !important;
+        }*/
+
+        .title-wrap {
+            color: #2d2d2d;
+            padding: 15px 40px;
+            background-color: #ffffff;
+            border-bottom: solid 1px #c7c7c7;
+            font: 1.3em Helvetica Neue, Helvetica, PingFang SC, Tahoma, Arial, sans-serif;
+        }
+
+        .back-icon {
+            color: #ffffff;
+            font-size: 17px;
+            padding: 4px;
+            background-color: #009688;
+            border-radius: 50%;
+        }
+
+        .layui-nav a {
+            font-size: 13px;
+        }
+
+    </style>
+    {% block header %}
+    {% endblock %}
+</head>
+<body class="layui-layout-body">
+<div class="layui-layout layui-layout-admin">
+    <div class="layui-header">
+        <ul class="layui-nav layui-layout-left " style="padding: 0">
+            <li class="layui-nav-item slider">
+                <label for="slider_checkbox" href="#" style="width: 100%;cursor: pointer; height: 100%;display: inline-block;">
+                    <i class="layui-icon"> &#xe66b; &nbsp;</i>
+                    ISOUNDERZ
+                </label>
+            </li>
+        </ul>
+        <ul class="layui-nav layui-layout-left nva_no_show_in_phone" style="margin-left: 200px">
+            <li class="layui-nav-item "><a href="">控制台</a></li>
+            <li class="layui-nav-item "><a style="cursor: pointer" onclick="onlineProcess()">在线处理</a></li>
+            <li class="layui-nav-item ">
+                <a href="javascript:;">其它</a>
+                <dl class="layui-nav-child">
+                    <dd><a href="">消息</a></dd>
+                    <dd><a href="">授权</a></dd>
+                </dl>
+            </li>
+        </ul>
+        <ul class="layui-nav layui-layout-right">
+            {% if session.loggedIn -%}
+                <li class="layui-nav-item">
+                    <a href="javascript:;">
+                        <img src="{{ url_for('static', filename='res/img/login.jpg') }}" class="layui-nav-img">
+                        {{ session.userName }}
+                    </a>
+                    <dl class="layui-nav-child">
+                        <dd><a href="">个人资料</a></dd>
+                        <dd><a href="">设置</a></dd>
+                        <dd><a href="{{ url_for('route_logout') }}">退出</a></dd>
+                    </dl>
+                </li>
+            {%- endif %}
+        </ul>
+    </div>
+    <input id="slider_checkbox" type="checkbox"/>
+    <div class="layui-side layui-bg-black extend_width">
+        <div class="layui-side-scroll">
+            <ul class="layui-nav layui-nav-tree">
+                <li class="layui-nav-item"><a href="{{ url_for('route_construction') }}"><i class="layui-icon">&#xe653;</i>概览</a></li>
+                <li class="layui-nav-item"><a href="{{ url_for('route_devices') }}"><i class="layui-icon">&#xe857;</i>设备</a></li>
+                <li class="layui-nav-item"><a href="{{ url_for('route_devices_operation_addNewDevice') }}"><i class="layui-icon">&#xe61f;</i>新建实例</a></li>
+                <li class="layui-nav-item"><a href="{{ url_for('route_probeData') }}"><i class="layui-icon">&#xe656;</i>探测数据</a></li>&#xe61f;
+                <li class="layui-nav-item">
+                    <a href="javascript:;"><i class="layui-icon">&#xe770;</i>用户管理</a>
+                    <dl class="layui-nav-child">
+                        <dd><a href="{{ url_for('route_construction') }}">个人资料</a></dd>
+                        <dd><a href="{{ url_for('route_construction') }}">用户列表</a></dd>
+                    </dl>
+                </li>
+                <li class="layui-nav-item"><a href="{{ url_for('route_construction') }}"><i class="layui-icon">&#xe60e;</i>历史</a></li>
+                <li class="layui-nav-item"><a href="{{ url_for('route_construction') }}"><i class="layui-icon">&#xe607;</i>帮助</a></li>
+            </ul>
+        </div>
+    </div>
+    <div class="layui-body extend_left" style="bottom: 0; background-color: #e6e6e6">
+        {% block body %}
+        {% endblock %}
+        <div style="width: 100%; height: 110px;">
+        </div>
+    </div>
+</div>
+</body>
+
+
+<script>
+    layui.use('element', function () {
+        var element = layui.element;
+    });
+
+
+    function onlineProcess() {
+        layer.open({
+            type: 2,
+            title: '电离图',
+            shadeClose: false,
+            shade: 0,
+            maxmin: true,
+            area: ['1395px', '695px'],
+            //area: ['90%', '90%'],
+            content: '{{ url_for("route_ionoDiagram", types="local") }}',
+            success: function (layero, index) {
+                //console.log(layero, index);
+                console.log(window.location.href);
+            }
+        });
+    }
+</script>
+{% block footer %}
+{% endblock %}
+</html>
+
+

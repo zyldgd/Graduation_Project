@@ -1,0 +1,152 @@
+<!DOCTYPE html>
+<html lang="zh" style="height: 100%; width: 100%;">
+<head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
+    <title>登录</title>
+    <link rel="stylesheet" href="{{ url_for('static', filename='res/layui/css/layui.css', _external=True) }}">
+    <script src="{{ url_for('static', filename='res/layui/layui.js', _external=True) }}"></script>
+    <style>
+        #warp {
+            height: 100%;
+            width: 375px;
+            margin: auto;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+        }
+
+        @media screen and (max-width: 768px) {
+            #warp {
+                width: 85%;
+                max-width:375px;
+            }
+        }
+
+        body {
+            background-color: #f7f7f7;
+            height: 100%;
+            width: 100%;
+            background-image: url("https://s2.ax1x.com/2019/01/18/k9JWy4.jpg");
+            background-repeat: no-repeat;
+            background-position: center;
+            background-clip: content-box;
+            /*background-attachment: fixed;*/
+            background-origin: content-box;
+            background-size: cover;
+        }
+
+        #logo-wrap {
+            background-color: #ffffff;
+            max-width: 300px;
+            padding: 20px;
+            box-shadow: 0 0 4px 0 #7b7b7b;
+            border-radius: 3px;
+        }
+
+        #logo {
+            width: 35%;
+            margin: 10px auto;
+        }
+
+        #sign {
+            text-align: center;
+            color: #777777;
+            margin: 15px auto;
+            font-size: 1.2em;
+            font-family: sans-serif;
+        }
+
+        #a-forget-password {
+            text-decoration: none;
+            color: #67c8ff;
+            cursor: pointer;
+        }
+
+        #a-forget-password:hover {
+            color: #3995ff;
+        }
+
+    </style>
+</head>
+<body>
+<div id="warp">
+    <div id="logo-wrap">
+        <form class="layui-form" action="{{ url_for('route_index') }}" method="post" style="text-align: center;">
+            <img id="logo" src="{{ url_for('static', filename='res/img/logo_black.png') }}">
+            <p id="sign">Sign in to ISOUNDERZ</p>
+            <input lay-verify="pass" id="userName" type="text" name="userName" placeholder="用户" autocomplete="off" class="layui-input" style="margin: 10px 0">
+            <input lay-verify="pass" id="userPassword" type="password" name="userPassword" placeholder="密码" autocomplete="off" class="layui-input" style="margin: 10px 0">
+            <div style="text-align: right; width: 100%; margin: 10px auto">
+                <a id="a-forget-password">忘记密码？</a>
+            </div>
+            <button type="submit" class="layui-btn" lay-submit lay-filter="submit_btn" style="width: 100%;margin: 10px 0">登录</button>
+        </form>
+
+    </div>
+</div>
+
+</body>
+<script>
+    layui.use(['layer', 'form'], function () {
+        var layer = layui.layer, form = layui.form;
+
+        form.on('submit(submit_btn)', function (data) {
+            console.log(data.field);
+            submitForm();
+            //
+            return false;
+        });
+
+        /*
+        form.verify({
+            username: function (value, item) { //value：表单的值、item：表单的DOM对象
+                if (!new RegExp("^[a-zA-Z0-9_\u4e00-\u9fa5\\s·]+$").test(value)) {
+                    return '用户名不能有特殊字符';
+                }
+                if (/(^\_)|(\__)|(\_+$)/.test(value)) {
+                    return '用户名首尾不能出现下划线\'_\'';
+                }
+                if (/^\d+\d+\d$/.test(value)) {
+                    return '用户名不能全为数字';
+                }
+            }
+
+            //我们既支持上述函数式的方式，也支持下述数组的形式
+            //数组的两个值分别代表：[正则匹配、匹配不符时的提示文字]
+            , pass: [
+                /^[\S]{6,12}$/
+                , '密码必须6到12位，且不能出现空格'
+            ]
+        });*/
+        // layer.msg('Hello World');
+    });
+
+    function submitForm() {
+        var xhr = new XMLHttpRequest();
+        xhr.open('post', "{{ url_for('route_login') }}");
+        xhr.setRequestHeader("Content-type", "application/json");
+        var userName = document.getElementById('userName');
+        var userPassword = document.getElementById('userPassword');
+        var content = {
+            'userName': userName.value,
+            'userPassword': userPassword.value
+        };
+        var str = JSON.stringify(content);
+        xhr.send(str);
+        xhr.onreadystatechange = function () {
+            if (xhr.readyState === 4 && xhr.status === 200) {
+                var ans = JSON.parse(xhr.responseText);
+                console.log(ans);
+                if (ans['ans'] === 1) // 设备ID不存在
+                {
+                    window.location.href = "{{ url_for('route_index') }}";
+                }
+                else {
+                    layer.msg('用户名或密码错误！');
+                }
+            }
+        };
+    }
+</script>
+</html>

@@ -1,0 +1,73 @@
+Request = {
+    "requestType":"probeRequest", 
+    "targetDeviceID": 100001,
+    "triggerTime": {
+        "mode": "GPSTrigge",
+        "year": 0,
+        "mouth": 0,
+        "day": 0,
+        "hour": 0,
+        "minutes": 0,
+        "second": 0
+    },
+    "probeParams": {
+        "probe_mode": "verticalDetection",
+        "send_recv_mode": "send_recv",
+        "probe_interval": 0,
+        "groups_number": 1,
+        "repetition_number": 32,
+        "freq_mode": "COS",
+        "freq_start": 2,
+        "freq_step": 0.05,
+        "freq_end": 20,
+        "code_id": 160001,
+        "code_duration": 25.6,
+        "pulse_length": 360
+    }
+}
+
+
+Request = {
+    "requestType":"statusRequest", 
+    "targetDeviceID": 100001
+}
+
+statusTemp = {
+    "sysClockPrecision": 100,
+    "probing": false,
+    "process": 0,
+    "GPS": {
+        "locked": true,
+        "year": 2019,
+        "mouth": 4,
+        "day": 1,
+        "hour": 12,
+        "minutes": 0,
+        "second": 0,
+        "latitude": 30.52,
+        "longitude": 114.31, 
+        "altitude": 36,
+        "visible_satellites": 7,
+        "tracking_satellites": 3
+    }
+}
+
+
+
+class deviceServer(socketserver.BaseRequestHandler):
+    def handle(self):
+        ...
+    def setup(self):
+        ...
+    def finish(self):
+        ...
+
+
+
+socketserver.ThreadingTCPServer(("0.0.0.0", 15527), deviceServer)
+
+var C16ACode = [1, 1, -1, 1, 1, 1, 1, -1, 1, -1, -1, -1, 1, -1, 1, 1];
+var C16BCode = [1, 1, -1, 1, 1, 1, 1, -1, -1, 1, 1, 1, -1, 1, -1, -1];
+
+1，1，0，1，1，1，1，0，1，0，0，0，1，0，1，1
+1，1，0，1，1，1，1，0，0，1，1，1，0，1，0，0

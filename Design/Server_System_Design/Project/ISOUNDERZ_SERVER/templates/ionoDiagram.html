@@ -1,0 +1,409 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
+    <title>电离图</title>
+
+    <link rel="stylesheet" href="{{ url_for('static', filename='res/layui/css/layui.css', _external=True) }}">
+    <script src="{{ url_for('static', filename='res/layui/layui.js', _external=True) }}"></script>
+    <script src="{{ url_for('static', filename='js/base.js', _external=True) }}"></script>
+
+    <style>
+        .layui-form-onswitch {
+            border-color: #009688;
+            background-color: #009688;
+        }
+
+        .layui-form-switch {
+            margin-top: 0;
+        }
+
+        .layui-form-item {
+            margin-bottom: 0;
+            text-align: center;
+        }
+
+        #params-table tr {
+            height: 33px;
+        }
+
+        #div-params {
+            margin: 20px auto;
+            margin-top: 70px;
+        }
+
+        #div-canvas {
+            padding: 20px 15px;
+            text-align: center;
+        }
+
+        .wrapper {
+            display: grid;
+            grid-template-columns: 350px auto;
+        }
+
+        #ionoCanvas {
+            margin: auto;
+            background-color: #f2f2f2;
+        }
+
+
+    </style>
+</head>
+<body>
+<div class="wrapper">
+    <div id="div-params">
+        <div>
+            <table id="params-table" class="layui-table" lay-size="sm" style="width: 300px">
+                <colgroup>
+                    <col width="100">
+                    <col width="200">
+                    <col>
+                </colgroup>
+                <thead>
+                <tr>
+                    <th>参数</th>
+                    <th>值</th>
+                </tr>
+                </thead>
+                <tbody>
+                <tr>
+                    <td>类型</td>
+                    <td id="params-type"></td>
+                </tr>
+                <tr>
+                    <td>日期</td>
+                    <td id="params-date"></td>
+                </tr>
+                <tr>
+                    <td>时间</td>
+                    <td id="params-time"></td>
+                </tr>
+                <tr>
+                    <td>单点次数</td>
+                    <td id="params-psn"></td>
+                </tr>
+                <tr>
+                    <td>起始频率</td>
+                    <td id="params-freq-start"></td>
+                </tr>
+                <tr>
+                    <td>步进频率</td>
+                    <td id="params-freq-step"></td>
+                </tr>
+                <tr>
+                    <td>截止频率</td>
+                    <td id="params-freq-end"></td>
+                </tr>
+                <tr>
+                    <td>经度</td>
+                    <td id="params-longitude"></td>
+                </tr>
+                <tr>
+                    <td>纬度</td>
+                    <td id="params-latitude"></td>
+                </tr>
+                <tr>
+                    <td>恒虚警</td>
+                    <td>
+                        <div class="layui-form">
+                            <div class="layui-form-item">
+                                <input id="params-CFAR" lay-filter="CFAR_change" type="checkbox" name="sex" value="10003" lay-skin="switch" lay-text="ON|OFF">
+                            </div>
+                        </div>
+                    </td>
+                </tr>
+                <tr>
+                    <td>地波裁剪</td>
+                    <td>
+                        <div id="params-clip" class="demo-slider"></div>
+                    </td>
+                </tr>
+
+                </tbody>
+            </table>
+            <div class="layui-form" style="margin-top: 30px; text-align: center">
+                <div class="layui-btn-group">
+                    <label class="layui-form-item layui-btn" for="uploadDataInput" type="file" style=""><i class="layui-icon">&#xe681;</i>上传本地文件处理
+                        <input type="file" id="uploadDataInput" style="display: none"/>
+                    </label>
+                    <button class="layui-btn" id="save-img" onclick="save_img()"><i class="layui-icon">&#xe601;</i>下载图片</button>
+                </div>
+            </div>
+        </div>
+    </div>
+    <div id="div-canvas">
+        <canvas id="ionoCanvas" width="1000" height="600"></canvas>
+    </div>
+</div>
+</body>
+<script>
+    layui.use(['element', 'slider', 'form', 'layedit', 'laydate'], function () {
+        var slider = layui.slider;
+        var form = layui.form;
+        var element = layui.element;
+
+
+        slider.render({
+            elem: '#params-clip',
+            value: 0,//初始值
+            change: function (value) {
+                if (ionoDiagramLayer !== null) {
+                    params_clip_value = value;
+                    ionoDiagramLayer.clip_value = params_clip_value;
+                    ionoDiagramLayer.CFAR_SW = params_CFAR_SW;
+                    ionoDiagramLayer.drawALL();
+                }
+            }
+        });
+        form.on('switch(CFAR_change)', function (data) {
+            if (ionoDiagramLayer !== null) {
+                params_clip_value = params_CFAR.checked ? 30 : 0;
+                params_CFAR_SW = params_CFAR.checked;
+                ionoDiagramLayer.clip_value = params_clip_value;
+                ionoDiagramLayer.CFAR_SW = params_CFAR_SW;
+                ionoDiagramLayer.drawALL();
+            }
+
+        });
+    });
+</script>
+<script>
+    let params_type = document.getElementById("params-type");
+    let params_date = document.getElementById("params-date");
+    let params_time = document.getElementById("params-time");
+    let params_psn = document.getElementById("params-psn");
+    let params_freq_start = document.getElementById("params-freq-start");
+    let params_freq_step = document.getElementById("params-freq-step");
+    let params_freq_end = document.getElementById("params-freq-end");
+    let params_longitude = document.getElementById("params-longitude");
+    let params_latitude = document.getElementById("params-latitude");
+    let params_CFAR = document.getElementById("params-CFAR");
+    let params_clip = document.getElementById("params-clip");
+    let ionoCanvas = document.getElementById("ionoCanvas");
+    let uploadDataInput = document.getElementById("uploadDataInput");
+
+
+    let ionoDiagramLayer = null;
+    let types = "{{ types }}";
+    let params_CFAR_SW = params_CFAR.checked;
+    let params_clip_value = 0;
+    let curDeviceId = null;
+
+    window.onload = function () {
+        if (types === "local") {
+            uploadDataInput.onchange = function (ev) {
+                let file = this.files[0];
+                let reader = new FileReader();
+                let probeData = new ProbeData();
+                reader.readAsArrayBuffer(file);
+                reader.onload = function () {
+                    probeData.rawData = new Int16Array(reader.result);
+                    probeData.readFromLocal(file);
+                    ionoDiagramLayer = new IonoDiagramLayer(ionoCanvas, probeData);
+                    ionoDiagramLayer.ionoDataDiagram.init();
+                    ionoDiagramLayer.drawALL();
+                    setParams(probeData);
+                }
+            };
+        }
+        else if (types === "past") {
+            ionoDiagramLayer = new IonoDiagramLayer(ionoCanvas, null);
+            ionoDiagramLayer.ionoDataDiagram = parent.window.curIonoDataDiagram;
+            ionoDiagramLayer.ionoDataDiagram.init();
+            ionoDiagramLayer.drawALL();
+            setParams(ionoDiagramLayer.ionoDataDiagram.probeData);
+        }
+        else if (types === "now") {
+            curDeviceId = parent.window.curDeviceId;
+            console.log(curDeviceId);
+            getProbeInfo(curDeviceId, dealProbeInfo);
+        }
+
+
+    };
+
+    //=========================================================================================================
+    function getCurProbeData(deviceId, begin, end, success) {
+        let xhr = new XMLHttpRequest();
+        xhr.open('post', "{{ url_for('route_probeData') }}");
+        xhr.setRequestHeader("Content-type", "application/json");
+
+        let content = {
+            request: "probeData",
+            curProbeData: true,
+            deviceId: deviceId,
+            date: null,
+            begin: begin,
+            end: end
+        };
+
+        xhr.send(JSON.stringify(content));
+        xhr.onreadystatechange = function () {
+            if (xhr.readyState === 4 && xhr.status === 200) {
+                let ans = JSON.parse(xhr.responseText);
+                if (ans['ans'] === 0) // 设备ID不存在
+                {
+                    success(ans);
+                    //layer.msg('修改成功！');
+                }
+                else {
+                    //layer.alert('设备ID已存在！', {icon: 5});
+                }
+            }
+        };
+
+    }
+
+    function getProbeInfo(deviceId, success) {
+        let xhr = new XMLHttpRequest();
+        xhr.open('post', "{{ url_for('route_probeData') }}");
+        xhr.setRequestHeader("Content-type", "application/json");
+
+        let content = {
+            request: "probeInfo",
+            deviceId: deviceId
+        };
+
+        xhr.send(JSON.stringify(content));
+        xhr.onreadystatechange = function () {
+            if (xhr.readyState === 4 && xhr.status === 200) {
+                let ans = JSON.parse(xhr.responseText);
+                if (ans['ans'] === 0) {
+                    success(ans);
+                }
+                else {
+                }
+            }
+        };
+
+    }
+
+    function dealProbeInfo(result) {
+        let probing = result.probing;
+        let probed = result.probed;
+        let task = result.task;
+        let index = result.index;
+        let timeInterval = 2000;
+
+        if (probing) {
+            getCurProbeData(curDeviceId, null, null,
+                function (result2) {
+                    if (result2.data === null) {
+                        return;
+                    }
+                    let probeData = new ProbeData();
+                    let temp = Object.assign({transposed: false, data: result2.data}, task);
+                    let lastIndex = index;
+                    probeData.init(temp);
+                    ionoDataDiagram = new IonoDataDiagram(probeData);
+                    ionoDiagramLayer = new IonoDiagramLayer(ionoCanvas, null);
+                    ionoDiagramLayer.ionoDataDiagram = ionoDataDiagram;
+                    ionoDiagramLayer.ionoDataDiagram.init();
+                    ionoDiagramLayer.drawALL();
+                    setParams(probeData);
+
+                    var t1 = window.setInterval(
+                        function () {
+                            getCurProbeData(curDeviceId, lastIndex - 1, index,
+                                function (result3) {
+                                    if (result3.data === null) {
+                                        window.clearInterval(t1);
+                                        return;
+                                    }
+                                    let onedata = result3.data;
+                                    for (let j = 0; j < onedata.length; j++) {
+                                        for (let i = 0; i < onedata[0].length; i++) {
+                                            ionoDiagramLayer.ionoDataDiagram.ampData[i][lastIndex - 1 + j] = onedata[j][i];
+                                        }
+                                    }
+                                    index = result3.index;
+                                    ionoDiagramLayer.drawALL();
+                                    if (index >= probeData.width) {
+                                        window.clearInterval(t1);
+                                    }
+                                })
+
+                        }, timeInterval);
+                });
+        }
+        else if (probed) {
+            getCurProbeData(curDeviceId, null, null,
+                function (result2) {
+                    if (result2.data === null) {
+                        return;
+                    }
+                    let probeData = new ProbeData();
+                    let temp = Object.assign({transposed: false, data: result2.data}, task);
+                    probeData.init(temp);
+                    ionoDataDiagram = new IonoDataDiagram(probeData);
+                    ionoDiagramLayer = new IonoDiagramLayer(ionoCanvas, null);
+                    ionoDiagramLayer.ionoDataDiagram = ionoDataDiagram;
+                    ionoDiagramLayer.ionoDataDiagram.init();
+                    ionoDiagramLayer.drawALL();
+                    setParams(probeData);
+                });
+        }
+    }
+
+    function save_img() {
+        exportCanvasAsPNG("ionoCanvas", "diagram.jpg");
+    }
+
+    function exportCanvasAsPNG(id, fileName) {
+
+        let canvasElement = document.getElementById(id);
+
+        let MIME_TYPE = "image/jpg";
+
+        let imgURL = canvasElement.toDataURL(MIME_TYPE);
+
+        let dlLink = document.createElement('a');
+        dlLink.download = fileName;
+        dlLink.href = imgURL;
+        dlLink.dataset.downloadurl = [MIME_TYPE, dlLink.download, dlLink.href].join(':');
+
+        document.body.appendChild(dlLink);
+        dlLink.click();
+        document.body.removeChild(dlLink);
+    }
+
+
+    /***************************************************************/
+
+    ionoCanvas.onmousemove = function (ev) {
+        if (ionoDiagramLayer !== null) {
+            ionoDiagramLayer.mouseX = ev.layerX;
+            ionoDiagramLayer.mouseY = ev.layerY;
+            ionoDiagramLayer.mouseMoveFun();
+        }
+    };
+
+    /***************************************************************/
+
+    /*
+    //ionoDiagramLayer.contextMain.translate(0.5,0.5);
+    ionoDiagramLayer.contextMain.imageSmoothingQuality = "Height";
+    ionoDiagramLayer.contextMain.imageSmoothingEnabled = false;
+    ionoDiagramLayer.contextBuffer.imageSmoothingQuality = "Height";
+    ionoDiagramLayer.contextBuffer.imageSmoothingEnabled = false;
+    cardBody.setAttribute("DataDiagramIndex",index);
+    */
+    function setParams(probeData) {
+        params_type.innerHTML = probeData.type;
+
+        let DateTime = formatDateTime(probeData.date, probeData.time);
+        params_date.innerHTML = DateTime[0];
+        params_time.innerHTML = DateTime[1];
+        params_psn.innerHTML = probeData.PSN;
+        params_freq_start.innerHTML = probeData.freq_start + " MHz";
+        params_freq_step.innerHTML = probeData.freq_step + " MHz";
+        params_freq_end.innerHTML = probeData.freq_end + " MHz";
+        params_longitude.innerHTML = probeData.longitude;
+        params_latitude.innerHTML = probeData.latitude;
+    }
+</script>
+</html>
+
+

@@ -1,0 +1,190 @@
+{% extends "general.html" %}
+
+{% block header -%}
+    <style>
+        .content-warp {
+            padding: 50px 10px;
+            margin: auto;
+            max-width: 500px;
+            width: 40%;
+        }
+
+
+        @media screen and (max-width: 768px) {
+            .content-warp {
+                width: 90%;
+                max-width: 500px;
+            }
+        }
+
+        .layui-card-header {
+            font-weight: bold;
+        }
+
+        .layui-container {
+            width: 100%;
+        }
+
+        .layui-form-item, .layui-input-block {
+            margin: auto;
+        }
+
+        .layui-form-label {
+            float: left;
+            display: block;
+            padding: 9px 5px;
+            width: 80px;
+            font-weight: 400;
+            line-height: 20px;
+            text-align: left;
+        }
+
+        .layui-row {
+            margin: 10px auto;
+        }
+
+        .layui-card > div, .layui-card > input {
+            color: #333333
+        }
+
+        .layui-input, .layui-select, .layui-textarea {
+            color: #333333
+        }
+
+        .layui-input:disabled {
+            color: #eff0ef;
+            cursor: not-allowed;
+
+        }
+
+    </style>
+
+{%- endblock %}
+
+
+
+{% block body -%}
+    <div class="title-wrap"><a href="javascript:history.back(-1)"> <i class="layui-icon back-icon">&#xe603;</i></a>
+        新设备添加
+    </div>
+    <div class="content-warp">
+        <div class="layui-form">
+            <div class="layui-card">
+                <div class="layui-card-header">新设备</div>
+                <div class="layui-card-body">
+                    <div class="layui-container">
+                        <div class="layui-row">
+                            <div class="layui-col-md6">
+                                <label for="deviceId" class="layui-form-label">ID</label>
+                            </div>
+                            <div class="layui-col-md6">
+                                <div class="layui-form-item">
+                                    <input type="text" placeholder="(必填) 确保与硬件一致" maxlength="50" name="deviceId" id="deviceId" required="" lay-verify="required" autocomplete="off" class="layui-input">
+                                </div>
+                            </div>
+                        </div>
+                        <div class="layui-row">
+                            <div class="layui-col-md6">
+                                <label for="deviceName" class="layui-form-label">设备名</label>
+                            </div>
+                            <div class="layui-col-md6">
+                                <div class="layui-form-item">
+                                    <input type="text" placeholder="(必填)" maxlength="50" name="deviceName" id="deviceName" required="" lay-verify="required" autocomplete="off" class="layui-input">
+                                </div>
+                            </div>
+                        </div>
+                        <div class="layui-row">
+                            <div class="layui-col-md6">
+                                <label for="deviceType" class="layui-form-label">设备类型</label>
+                            </div>
+                            <div class="layui-col-md6">
+                                <div class="layui-form-item">
+                                    <input type="text" maxlength="50" name="deviceType" id="deviceType" autocomplete="off" class="layui-input">
+                                </div>
+                            </div>
+                        </div>
+                        <div class="layui-row">
+                            <div class="layui-col-md6">
+                                <label for="deviceLocation" class="layui-form-label">所在位置</label>
+                            </div>
+                            <div class="layui-col-md6">
+                                <div class="layui-form-item">
+                                    <input type="text" maxlength="50" name="deviceLocation" id="deviceLocation" autocomplete="off" class="layui-input">
+                                </div>
+                            </div>
+                        </div>
+                        <div class="layui-row">
+                            <div class="layui-col-md6">
+                                <label for="remark" class="layui-form-label">备注</label>
+                            </div>
+                            <div class="layui-col-md6">
+                                <div class="layui-form-item">
+                                    <textarea maxlength="256" name="remark" id="remark" class="layui-textarea"></textarea>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    <div style="text-align: right; margin: 30px 20px 10px auto ">
+                        <div class="layui-input-block">
+                            <button type="reset" onclick="return submitDevice();" class="layui-btn" style="width: 100px"><i class="layui-icon">&#xe608;</i> 添加</button>
+                            <button type="reset" class="layui-btn layui-btn-primary" style="width: 80px">重置</button>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+{%- endblock %}
+
+
+
+{% block footer -%}
+    <script>
+        layui.use('form', function () {
+            var form = layui.form;
+            //监听提交
+
+        });
+
+        //
+        function submitDevice() {
+            //创建异步对象
+            var xhr = new XMLHttpRequest();
+            //设置请求的类型及url
+            //alert(123);
+            //post请求一定要添加请求头才行不然会报错
+            xhr.open('post', "{{ url_for('route_devices_operation_addNewDevice') }}");
+            xhr.setRequestHeader("Content-type", "application/json");
+            var deviceId = document.getElementById('deviceId');
+            var deviceName = document.getElementById('deviceName');
+            var deviceType = document.getElementById('deviceType');
+            var deviceLocation = document.getElementById('deviceLocation');
+            var remark = document.getElementById('remark');
+            var content = {
+                'deviceId': deviceId.value,
+                'deviceName': deviceName.value,
+                'deviceType': deviceType.value,
+                'deviceLocation': deviceLocation.value,
+                'remark': remark.value
+            };
+            var str = JSON.stringify(content);
+            xhr.send(str);
+            xhr.onreadystatechange = function () {
+                if (xhr.readyState === 4 && xhr.status === 200) {
+                    var ans = JSON.parse(xhr.responseText);
+                    console.log(ans);
+                    if (ans['ans'] === 1) // 设备ID不存在
+                    {
+                        layer.msg('添加成功！');
+                    }
+                    else {
+                        layer.alert('设备ID已存在！', {icon: 5});
+                    }
+                }
+            };
+        }
+
+
+    </script>
+
+{%- endblock %}

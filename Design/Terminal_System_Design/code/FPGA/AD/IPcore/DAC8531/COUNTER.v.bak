@@ -1,0 +1,26 @@
+module COUNTER(
+    input   wire                  CLK,
+    input   wire                  RESET_N,
+    input   wire                  COUNTING,
+    output  reg    [31:0]          COUNT
+    );
+
+    reg   [31:0] cnt = 0;
+
+    always @(posedge CLK) begin
+        if (!RESET_N) begin
+            COUNT <= 0;
+            cnt <= 0;
+        end else begin
+            if (COUNTING) begin
+                cnt <= cnt+1;
+            end else begin
+                COUNT <= cnt;
+                cnt <= 0;
+            end  
+        end
+    end
+
+
+
+endmodule

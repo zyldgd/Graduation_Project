@@ -1,0 +1,263 @@
+{% extends "general.html" %}
+
+{% block header -%}
+<style>
+    .content-warp {
+        padding: 50px 50px;
+        margin: auto;
+    }
+
+
+    @media screen and (max-width: 768px) {
+        .content-warp {
+            width: 90%;
+            max-width: 500px;
+        }
+    }
+
+    .layui-card-header {
+        font-weight: bold;
+    }
+
+    .layui-container {
+        width: 100%;
+    }
+
+    .layui-row {
+        margin: 10px auto;
+    }
+
+    .layui-card > div, .layui-card > input {
+        color: #333333
+    }
+
+    .layui-input, .layui-select, .layui-textarea {
+        color: #333333
+    }
+
+    .layui-input:disabled {
+        color: #eff0ef;
+        cursor: not-allowed;
+
+    }
+
+    .probe-data-img {
+        width: 100%;
+    }
+
+    .probe-data-warp .layui-card-header {
+        border-bottom: 0;
+    }
+
+    .probe-data-warp {
+        min-height: 600px;
+    }
+
+    .probe-data-warp .layui-card {
+        box-shadow: 0 0 2px 1px rgba(0, 0, 0, 0.15);
+        cursor: pointer;
+    }
+
+    .probe-data-warp .layui-card :hover {
+        background: #e5e5e5;
+    }
+
+    .flow-default li {
+        display: inline-block;
+        margin: 0 5px;
+        font-size: 14px;
+        width: 48%;
+        margin-bottom: 10px;
+        height: 100px;
+        line-height: 100px;
+        text-align: center;
+        background-color: #eee;
+    }
+
+    .flow-default li img {
+        width: 100%;
+        height: 100%;
+    }
+
+
+</style>
+{%- endblock %}
+
+
+{% block body -%}
+<div class="title-wrap"><a href="javascript:history.back(-1)"> <i class="layui-icon back-icon">&#xe603;</i></a>
+    电离层探测数据
+</div>
+<div class="content-warp">
+    <div class="layui-card">
+        <div class="layui-card-header">探测数据</div>
+        <div class="layui-form" style="padding-top: 20px">
+            <div class="layui-form-item">
+                <div class="layui-inline">
+                    <label class="layui-form-label">选择设备ID</label>
+                    <div class="layui-input-inline">
+                        <select name="modules" lay-verify="required" lay-search="">
+                            <option value="">设备筛选</option>
+                            <option value="100001">100001</option>
+                            <option value="100002">100002</option>
+                        </select>
+                    </div>
+                </div>
+                <div class="layui-inline">
+                    <label class="layui-form-label">日期筛选</label>
+                    <div class="layui-input-inline">
+                        <input name="triggerDate" onfocus="this.blur();" type="text" class="layui-input" id="triggerDate" placeholder="yyyy-MM-dd">
+                    </div>
+                </div>
+                <div class="layui-inline">
+                    <button class="layui-btn">
+                        <i class="layui-icon layui-icon-search"></i>
+                    </button>
+                </div>
+            </div>
+        </div>
+        <div class="layui-card-body">
+            <div class="layui-container probe-data-warp">
+                <div class="layui-row layui-col-space20" id="probe-data-col">
+                    <div class="layui-col-md3">
+                        <div class="layui-card">
+                            <div class="layui-card-header">卡片面板</div>
+                            <div class="layui-card-body">
+                                <img class="probe-data-img" src="/static/res/img/test1.jpg">
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+{%- endblock %}
+
+
+{% block footer -%}
+<script>
+
+    layui.use('form', function () {
+        let form = layui.form;
+        //监听提交
+    });
+    layui.use('element', function () {
+        let element = layui.element;
+    });
+    layui.use('laydate', function () {
+        let laydate = layui.laydate;
+
+        //常规用法
+        laydate.render({
+            elem: '#triggerDate',
+            value: new Date()
+        });
+
+        //时间选择器
+        laydate.render({
+            elem: '#triggerTime',
+            type: 'time',
+            value: new Date()
+        });
+    });
+
+</script>
+
+<script>
+    var ionoDataDiagramList = [];
+    var curIonoDataDiagram = null;
+
+    function openImg() {
+        let index = this.getAttribute("datadiagramindex");
+        curIonoDataDiagram = ionoDataDiagramList[index];
+        layer.open({
+            type: 2,
+            title: '电离图',
+            shadeClose: false,
+            shade: 0,
+            maxmin: true,
+            area: ['1395px', '695px'],
+            //area: ['90%', '90%'],
+            content: '{{ url_for("route_ionoDiagram", types="past") }}',
+            success: function (layero, index) {
+                //console.log(layero, index);
+                //console.log(window.location.href);
+            }
+        });
+    }
+
+    function getProbeData() {
+        let xhr = new XMLHttpRequest();
+        xhr.open('post', "{{ url_for('route_probeData') }}");
+        xhr.setRequestHeader("Content-type", "application/json");
+        let content = {
+            request: "probeData",
+            curProbeData: false,
+            deviceId: null,
+            date: null
+        };
+        xhr.send(JSON.stringify(content));
+        let index = layer.open({
+            type: 3,
+            shade: 0.2,
+            icon: 16
+        });
+
+        xhr.onreadystatechange = function () {
+            if (xhr.readyState === 4 && xhr.status === 200) {
+                let ans = JSON.parse(xhr.responseText);
+                let dataList = [];
+                for (let i = 0; i < ans.length; i++) {
+                    dataList[i] = JSON.parse(ans[i]);
+                }
+                showProbeDataList(dataList);
+                layer.close(index);
+            }
+        };}
+
+    function probeDataTemplate(index, imgSrc) {
+        let col = document.createElement('div');
+        col.className = "layui-col-md3";
+        let card = document.createElement('div');
+        card.className = "layui-card";
+        let cardHeader = document.createElement('div');
+        cardHeader.className = "layui-card-header";
+        cardHeader.innerHTML = index;
+        let cardBody = document.createElement('div');
+        cardBody.setAttribute("datadiagramindex", index);
+        cardBody.className = "layui-card-body";
+        cardBody.onclick = openImg;
+        let img = document.createElement('img');
+        img.className = "probe-data-img";
+        img.src = imgSrc;
+        cardBody.appendChild(img);
+        card.appendChild(cardHeader);
+        card.appendChild(cardBody);
+        col.appendChild(card);
+        return col;
+    }
+
+    window.onload = function () {
+        getProbeData();
+    };
+
+    function showProbeDataList(dataList) {
+        let col = document.getElementById("probe-data-col");
+        col.innerHTML = "";
+        ionoDataDiagramList = [];
+        for (let i = 0; i < dataList.length; i++) {
+            let dataTemp = new ProbeData();
+            dataTemp.init(dataList[i]);
+            ionoDataDiagramList[i] = new IonoDataDiagram(dataTemp);
+            ionoDataDiagramList[i].init();
+            ionoDataDiagramList[i].drawOriginalImage();
+            ionoDataDiagramList[i].toImage();
+            col.appendChild(probeDataTemplate(i, ionoDataDiagramList[i].diagramImage.src));
+        }
+    }
+
+</script>
+
+
+{%- endblock %}

@@ -1,0 +1,127 @@
+{% extends "general.html" %}
+
+{% block header -%}
+    <style>
+        #devices-table-wrap {
+            margin: 20px auto 20px auto;
+            min-width: 50%;
+            max-width: 1000px;
+            padding: 20px;
+        }
+
+        @media screen and (max-width: 768px) {
+            #devices-table-wrap {
+                margin: 100px auto 20px auto;
+                max-width: 95%;
+            }
+        }
+
+        .layui-table, .layui-table-view {
+            background-color: #FFFFFF;
+        }
+
+        .operation-btn {
+            margin: 0 10px;
+        }
+
+        .layui-table-body {
+            min-height: 300px;
+        }
+
+
+    </style>
+
+    <script type="text/html" id="operationBar">
+        <a class="operation-btn layui-btn layui-btn-primary layui-btn-xs" lay-event="probe">探测</a>
+        <a class="operation-btn layui-btn layui-btn-primary layui-btn-xs" lay-event="modify">修改</a>
+        <a class="operation-btn layui-btn layui-btn-xs " lay-event="data">数据</a>
+    </script>
+
+    <script type="text/html" id="toolbar">
+        <div class="layui-btn-container">
+            <a class="layui-btn layui-btn-sm" href="{{ url_for('route_devices_operation_addNewDevice') }}" lay-event="addNewDevices">添加新设备</a>
+            <a class="layui-btn layui-btn-sm" lay-event="refresh" href="javascript:location.reload()">刷新列表</a>
+        </div>
+    </script>
+
+{%- endblock %}
+
+
+
+{% block body -%}
+    <div class="title-wrap">
+        设备列表
+    </div>
+    <div id="devices-table-wrap">
+        <table id="devices-table" lay-filter="devices-lay"></table>
+    </div>
+{%- endblock %}
+
+
+
+{% block footer -%}
+    <script>
+        layui.use('table', function () {
+            var table = layui.table;
+            table.render({
+                elem: '#devices-table'
+                , toolbar: '#toolbar'
+                , minHeight: 300
+                , skin: 'row'
+                , url: "{{ url_for('devicesStatus') }}"
+                , page: false
+                , even: false
+                , cellMinWidth: 80
+                , cols: [[
+                    {type: 'checkbox'}
+                    , {field: 'deviceId', align: 'center', title: 'ID', width: 150, sort: true}
+                    , {field: 'deviceName', align: 'center', title: '设备名', width: 200}
+                    , {field: 'deviceType', align: 'center', title: '类型', width: 100, sort: true}
+                    , {field: 'deviceLocation', align: 'center', title: '位置', width: 100}
+                    , {field: 'deviceState', align: 'center', title: '状态', width: 100}
+                    , {field: 'operation', align: 'center', title: '操作', toolbar: '#operationBar', minWidth: 200, event: 'operation_btn_click'}
+                ]]
+            });
+        });
+
+        layui.use('table', function () {
+            var table = layui.table;
+            //监听单元格事件
+            table.on('tool(devices-lay)', function (obj) {
+                var data = obj.data;
+                if (obj.event === 'probe') {
+                    /*
+                    layer.prompt({formType: 2, title: '修改 ID 为 [' + data.id + '] 的用户签名', value: data.sign}, function (value, index) {
+                        layer.close(index);
+                        //这里一般是发送修改的Ajax请求
+                        //同步更新表格和缓存对应的值
+                        obj.update({ sign: value });
+                    });route_devices_operation_detail
+                    */
+                    post("{{url_for('route_devices_operation_probe')}}", {"deviceId": data.deviceId});
+                } else if (obj.event === 'modify') {
+                    post("{{url_for('route_devices_operation_show')}}", {"type": "show", "deviceId": data.deviceId});
+                } else if (obj.event === 'reset') {
+
+                }
+            });
+        });
+
+        function post(URL, PARAMS) {
+            var temp = document.createElement("form");
+            temp.action = URL;
+            temp.method = "post";
+            temp.style.display = "none";
+            for (var x in PARAMS) {
+                var opt = document.createElement("textarea");
+                opt.name = x;
+                opt.value = PARAMS[x];
+                temp.appendChild(opt);
+            }
+            document.body.appendChild(temp);
+            temp.submit();
+            return temp;
+        }
+    </script>
+
+{%- endblock %}
